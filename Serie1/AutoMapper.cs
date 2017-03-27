@@ -6,9 +6,11 @@ using System.Threading.Tasks;
 
 namespace Serie1
 {
-    public class Student
+    public class AutoMapper
     {
-        public string Name { get; set; }
-        public int Nr { get; set; }
+        public static IMapper Build(Type klassSrc, Type klassDest)
+        {
+            return null;
+        }
     }
 }

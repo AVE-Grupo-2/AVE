@@ -6,9 +6,13 @@ using System.Threading.Tasks;
 
 namespace Serie1
 {
-    class Teacher
+    public class Teacher
     {
-        Teacher(int nr, string name) {... }
+        Teacher(int nr, string name)
+        {
+            Name = name;
+            Id = nr;
+        }
         public string Name { get; set; }
         public int Id { get; set; }
     }
