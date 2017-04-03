@@ -45,10 +45,10 @@
   <ItemGroup>
     <Compile Include="AutoMapper.cs" />
     <Compile Include="IMapper.cs" />
+    <Compile Include="Info.cs" />
     <Compile Include="Mapper.cs" />
     <Compile Include="Mapping.cs" />
     <Compile Include="Person.cs" />
-    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Student.cs" />
     <Compile Include="Teacher.cs" />

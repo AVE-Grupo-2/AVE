@@ -6,3 +6,11 @@ C:\Users\jonat\OneDrive\ISEL\Repositories\AVE\Serie-1\Serie1Test\bin\Debug\Serie
 C:\Users\jonat\OneDrive\ISEL\Repositories\AVE\Serie-1\Serie1Test\bin\Debug\Serie1.pdb
 C:\Users\jonat\OneDrive\ISEL\Repositories\AVE\Serie-1\Serie1Test\obj\Debug\Serie1Test.dll
 C:\Users\jonat\OneDrive\ISEL\Repositories\AVE\Serie-1\Serie1Test\obj\Debug\Serie1Test.pdb
+C:\Users\Gman\Desktop\Faculdade\UCs\AVE\Serie-1\Serie-1\Serie1Test\bin\Debug\Serie1Test.dll
+C:\Users\Gman\Desktop\Faculdade\UCs\AVE\Serie-1\Serie-1\Serie1Test\bin\Debug\Serie1Test.pdb
+C:\Users\Gman\Desktop\Faculdade\UCs\AVE\Serie-1\Serie-1\Serie1Test\bin\Debug\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll
+C:\Users\Gman\Desktop\Faculdade\UCs\AVE\Serie-1\Serie-1\Serie1Test\bin\Debug\Serie1.exe
+C:\Users\Gman\Desktop\Faculdade\UCs\AVE\Serie-1\Serie-1\Serie1Test\bin\Debug\Serie1.pdb
+C:\Users\Gman\Desktop\Faculdade\UCs\AVE\Serie-1\Serie-1\Serie1Test\obj\Debug\Serie1Test.csprojResolveAssemblyReference.cache
+C:\Users\Gman\Desktop\Faculdade\UCs\AVE\Serie-1\Serie-1\Serie1Test\obj\Debug\Serie1Test.dll
+C:\Users\Gman\Desktop\Faculdade\UCs\AVE\Serie-1\Serie-1\Serie1Test\obj\Debug\Serie1Test.pdb
