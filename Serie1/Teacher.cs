@@ -13,7 +13,11 @@ namespace Serie1
             Name = name;
             Id = nr;
         }
+
+        private int field;
         public string Name { get; set; }
         public int Id { get; set; }
+
+        
     }
 }

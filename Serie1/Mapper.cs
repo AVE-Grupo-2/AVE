@@ -20,16 +20,20 @@ namespace Serie1
 
         private PropertyInfo[] propertiesSrc;
         private PropertyInfo[] propertiesDest;
+
        private string value;
+
 
         public Mapper(Type klassSrc, Type klassDest)
         {
             this.klassSrc = klassSrc;
             this.klassDest = klassDest;
             matcher = new Dictionary<string, string>();
-            SelectEqualsMembers();
+            SelectEqualsFieldsAndProps();
 
         }
+
+       
 
         public Mapper Bind(Mapping m)
         {
@@ -44,44 +48,30 @@ namespace Serie1
         public object Map(object src)
         {
             // this.klassSrc = src.GetType();
-            ConstructorInfo ci= klassDest.GetConstructor(null);
-            Object obj= ci.Invoke(null);
+           
+            Object objDest = Activator.CreateInstance(klassDest);
 
-            PropertyInfo[] piSrc = src.GetType().GetProperties();
-         
+            setProperties(src, objDest);
 
-            Console.Write(klassSrc.Name + ": ");
-
-            for (int i = 0; i < piSrc.Length; ++i)
-            {
-                if (matcher.TryGetValue(piSrc[i].Name, out value))
-                {
-                    piSrc[i].GetValue(src);
-                    obj.
-
-                }
-                    
-            }
-            foreach (PropertyInfo pi in piSrc)
-            {
-                Console.Write(pi.Name + ": " + pi.GetValue(src) + ", ");
-            }
-
-            return null;
-
+            setFields(src,objDest);
+           
+            return objDest;
         }
 
-        public Mapper Match(string nameForm, string nameDest)
+      
+
+       public Mapper Match(string nameForm, string nameDest)
         {
             matcher.Add(nameForm,nameDest);
             return null;
         }
 
 
-        private  void SelectEqualsMembers()
+        private  void SelectEqualsFieldsAndProps()
         {
             PropertyInfo[] propSrc = klassSrc.GetProperties();
             PropertyInfo[] propDest = klassDest.GetProperties();
+
             for (int i = 0; i < propSrc.Length; ++i)
             {
                 for(int j=0; i<propDest.Length;++i)
@@ -90,6 +80,38 @@ namespace Serie1
                   matcher.Add(propSrc[i].Name,propDest[j].Name);
                 }
          
+            }
+        }
+
+         private void setProperties(object src, object objDest)
+       {
+            PropertyInfo[] piSrc = src.GetType().GetProperties();
+            PropertyInfo pi;
+            for (int i = 0; i < piSrc.Length; ++i)
+            {
+
+                if (matcher.TryGetValue(piSrc[i].Name, out value))
+                {
+                    pi = klassDest.GetProperty(value);
+                    pi.SetValue(objDest, piSrc[i].GetValue(src));
+                }
+
+            }
+        }
+
+        private void setFields(object src, object objDest)
+        {
+            FieldInfo[] fiSrc = src.GetType().GetFields();
+            FieldInfo fi;
+            for (int i = 0; i < fiSrc.Length; ++i)
+            {
+
+                if (matcher.TryGetValue(fiSrc[i].Name, out value))
+                {
+                    fi = klassDest.GetField(value);
+                    fi.SetValue(objDest, fiSrc[i].GetValue(src));
+                }
+
             }
         }
     }
