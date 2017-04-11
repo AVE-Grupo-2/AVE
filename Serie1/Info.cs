@@ -16,7 +16,7 @@ namespace Serie1
             Student s = new Student { Nr = 27721, Name = "Ze Manel", field=200 };
             Person p = (Person)m.Map(s);
 
-            Console.WriteLine(p.Name+"+"+ p.Id+"+"+p.getfield());
+         //   Console.WriteLine(p.Name+"+"+ p.Id+"+"+p.getfield());
             Console.WriteLine("TESTE1");
 
         }

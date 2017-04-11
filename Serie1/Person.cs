@@ -8,13 +8,34 @@ namespace Serie1
 {
     public class Person
     {
-        private int field;
+        private int privateField;
+        public int field;
         public string Name { get; set; }
         public int Id { get; set; }
 
-        public int getfield()
+        private int privateProperty
         {
-            return field;
+            get;set;
+        }
+
+        public void setPrivateProperty(int i)
+        {
+            this.privateProperty = i;
+        }
+
+        public int getPrivateProperty()
+        {
+            return this.privateProperty;
+        }
+
+        public void setPrivateField(int field)
+        {
+            this.privateField = field;
+        }
+
+        public int getPrivateField()
+        {
+            return this.privateField;
         }
     }
 

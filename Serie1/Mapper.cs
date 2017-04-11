@@ -11,26 +11,47 @@ namespace Serie1
 {
    public class Mapper : IMapper
    {
-       private Type klassSrc;
-       private Type klassDest;
-       private Dictionary<string,string> matcher;
-      
+        private Type klassSrc;
+        private Type klassDest;
+
+        private Dictionary<string, string> matcher;
+
         private FieldInfo[] fieldsSrc;
         private FieldInfo[] fieldsDest;
 
         private PropertyInfo[] propertiesSrc;
         private PropertyInfo[] propertiesDest;
 
-       private string value;
+        private string value;
 
 
         public Mapper(Type klassSrc, Type klassDest)
         {
             this.klassSrc = klassSrc;
+
             this.klassDest = klassDest;
             matcher = new Dictionary<string, string>();
+            
             SelectEqualProperties();
+            selectEqualFields();
         }
+
+
+        private void selectEqualFields()
+        {
+            fieldsSrc = klassSrc.GetFields();
+            fieldsDest = klassDest.GetFields();
+
+            for (int i = 0; i < fieldsSrc.Length; ++i)
+            {
+                for (int j = 0; i < fieldsDest.Length; ++i)
+                    if (fieldsSrc[i].Name.Equals(fieldsDest[j].Name) && fieldsSrc[i].GetType() == fieldsDest[j].GetType())
+                    {
+                        matcher.Add(fieldsSrc[i].Name, fieldsDest[j].Name);
+                    }
+                }
+        }
+
 
         public Mapper Bind(Mapping m)
         {
@@ -40,11 +61,19 @@ namespace Serie1
 
         public object[] Map(object[] src)
         {
-            throw new NotImplementedException();
+            object[] dest = new object[src.Length];
+            for(int i = 0; i < src.Length; ++i)
+            {
+                dest[i] = this.Map(src[i]);
+            }
+            return dest;
         }
 
         public object Map(object src)
         {
+
+            if(!klassSrc.IsInstanceOfType(src))
+                return null;
            
             Object objDest = Activator.CreateInstance(klassDest);
 
@@ -56,7 +85,6 @@ namespace Serie1
         }
 
       
-
        public Mapper Match(string nameForm, string nameDest)
         {
             matcher.Add(nameForm,nameDest);
@@ -73,15 +101,15 @@ namespace Serie1
             {
                 for(int j=0; i<propDest.Length;++i)
                     if (propSrc[i].Name.Equals(propDest[j].Name) && propSrc[i].GetType()== propDest[j].GetType())
-                {
-                  matcher.Add(propSrc[i].Name,propDest[j].Name);
-                }
-         
+                    {
+                        matcher.Add(propSrc[i].Name,propDest[j].Name);
+                    }
             }
         }
 
+
          private void setProperties(object src, object objDest)
-       {
+         {
             PropertyInfo[] piSrc = src.GetType().GetProperties();
             PropertyInfo pi;
             for (int i = 0; i < piSrc.Length; ++i)
@@ -96,6 +124,7 @@ namespace Serie1
             }
         }
 
+
         private void setFields(object src, object objDest)
         {
             FieldInfo[] fiSrc = src.GetType().GetFields();
@@ -108,12 +137,7 @@ namespace Serie1
                     fi = klassDest.GetField(value);
                     fi.SetValue(objDest, fiSrc[i].GetValue(src));
                 }
-
             }
         }
     }
-
-
-
-
 }
