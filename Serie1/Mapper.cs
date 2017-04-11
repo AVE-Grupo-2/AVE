@@ -29,15 +29,13 @@ namespace Serie1
             this.klassSrc = klassSrc;
             this.klassDest = klassDest;
             matcher = new Dictionary<string, string>();
-            SelectEqualsFieldsAndProps();
-
+            SelectEqualProperties();
         }
-
-       
 
         public Mapper Bind(Mapping m)
         {
             throw new NotImplementedException();
+            return this;
         }
 
         public object[] Map(object[] src)
@@ -47,7 +45,6 @@ namespace Serie1
 
         public object Map(object src)
         {
-            // this.klassSrc = src.GetType();
            
             Object objDest = Activator.CreateInstance(klassDest);
 
@@ -63,11 +60,11 @@ namespace Serie1
        public Mapper Match(string nameForm, string nameDest)
         {
             matcher.Add(nameForm,nameDest);
-            return null;
+            return this;
         }
 
 
-        private  void SelectEqualsFieldsAndProps()
+        private  void SelectEqualProperties()
         {
             PropertyInfo[] propSrc = klassSrc.GetProperties();
             PropertyInfo[] propDest = klassDest.GetProperties();
