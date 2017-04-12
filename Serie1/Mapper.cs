@@ -85,9 +85,11 @@ namespace Serie1
         }
 
       
-       public Mapper Match(string nameForm, string nameDest)
+       public Mapper Match(string nameFrom, string nameDest)
         {
-            matcher.Add(nameForm,nameDest);
+    
+            IMapper auxMapper = AutoMapper.Build(klassSrc.GetMember(nameFrom).GetType(), klassDest.GetMember(nameDest).GetType());
+            matcher.Add(nameFrom,nameDest);
             return this;
         }
 
@@ -134,8 +136,56 @@ namespace Serie1
 
                 if (matcher.TryGetValue(fiSrc[i].Name, out value))
                 {
-                    fi = klassDest.GetField(value);
-                    fi.SetValue(objDest, fiSrc[i].GetValue(src));
+                    if (objDest.GetType().GetField(value).GetType().IsValueType)
+                    {
+                        fi = klassDest.GetField(value);
+                        fi.SetValue(objDest, fiSrc[i].GetValue(src));
+                    }else
+                    {
+                        Type srcFieldType = fiSrc.GetType();
+                        if(null != srcFieldType.GetConstructor(new Type[0]))
+                        {
+                            IMapper auxMapper = AutoMapper.Build(srcFieldType, klassDest.GetField(value).GetType());
+                            klassDest.GetField(value).SetValue(objDest, auxMapper.Map(fiSrc[i].GetValue(src)));
+                        }
+                        else
+                        {
+                            ConstructorInfo[] constructors = objDest.GetType().GetField(value).GetType().GetConstructors();
+                            ConstructorInfo chosenOne;
+                            int size = 0;
+
+                            for(int f = 0; f < constructors.Length; ++f)
+                            {
+                                ParameterInfo[] parameters = constructors[i].GetParameters();
+
+                                for(int fy = 0; fy < parameters.Length; fy++)
+                                {
+                                    MemberInfo[] members = srcFieldType.GetMembers();
+
+                                    Boolean parameterMatch = false;
+
+                                    for(int pp = 0; pp < members.Length; ++pp)
+                                    {
+                                        if (parameters[fy].Name.ToLower().Equals(members[pp].Name.ToLower()))
+                                        {
+                                            parameterMatch = true;
+                                            break;
+                                        }
+                                
+                                    }
+                                    if (parameterMatch == false)
+                                        break;
+                                    
+                                    if(fy+1 == parameters.Length && size < parameters.Length)
+                                    {
+                                        chosenOne = constructors[i];
+                                        size = parameters.Length;
+                                    }
+                                }
+                            }
+                        }
+
+                    }
                 }
             }
         }

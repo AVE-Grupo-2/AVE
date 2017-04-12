@@ -91,9 +91,7 @@ namespace Serie1Test
             };
 
             Object[] res = m.Map(array);
-            
-
-                       
+                                 
         }
     }
 
