@@ -8,6 +8,7 @@ namespace Serie1
 {
     public class Person
     {
+        public Teacher teacher;
         private int privateField;
         public int field;
         public string Name { get; set; }

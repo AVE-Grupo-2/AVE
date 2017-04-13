@@ -72,7 +72,7 @@ namespace Serie1Test
         public void TestObjectNotMapped()
         {
             IMapper m = AutoMapper.Build(typeof(Student), typeof(Person)).Match("Nr", "Id");
-            Teacher teacher = new Teacher { field = 200, Name = "IamTeacher", Id = 123 };
+            Teacher teacher = new Teacher(123,"t");
             Person p = (Person)m.Map(teacher);
             Assert.IsNull(p);
         }
@@ -85,13 +85,24 @@ namespace Serie1Test
             Object[] array =
             {
                 new Student {Nr = 27721, Name = "Ze Manel", field = 200},
-                new Teacher {Name = "IamTeacher", Id = 123, field = 300 },
+              //  new Teacher {Name = "IamTeacher", Id = 123, field = 300 },
                 null,
                 new Student {Nr = 12345, Name = "IamStudent", field = 400}
             };
 
             Object[] res = m.Map(array);
                                  
+        }
+
+        [TestMethod]
+        public void ReferenceField()
+        {
+            IMapper m = AutoMapper.Build(typeof(Student), typeof(Person)).Match("Nr", "Id");
+            Student s = new Student { Nr = 27721, Name = "Ze Manel", field = 200, teacher = new Teacher(123,"t") };
+            Person p = (Person)m.Map(s);
+            Object.ReferenceEquals(s.teacher, p.teacher);
+            Assert.IsFalse( Object.ReferenceEquals(s.teacher, p.teacher));
+            Assert.AreEqual(s.teacher.name, p.teacher.name);
         }
     }
 

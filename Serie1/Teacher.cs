@@ -8,19 +8,20 @@ namespace Serie1
 {
     public class Teacher
     {
-        public Teacher()
+       
+        public Teacher(int nr, string name)
         {
-
-        }
-
-        Teacher(int nr, string name)
-        {
-            Name = name;
+            this.name = name;
             Id = nr;
         }
 
+        public Teacher(string name)
+        {
+            this.name = name;
+        }
+
         public int field;
-        public string Name { get; set; }
+        public string name { get; set; }
         public int Id { get; set; }
 
         
