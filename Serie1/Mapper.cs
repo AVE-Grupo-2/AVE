@@ -44,7 +44,7 @@ namespace Serie1
 
             for (int i = 0; i < fieldsSrc.Length; ++i)
             {
-                for (int j = 0; i < fieldsDest.Length; ++i)
+                for (int j = 0; j < fieldsDest.Length; ++j)
                     if (fieldsSrc[i].Name.Equals(fieldsDest[j].Name) && fieldsSrc[i].GetType() == fieldsDest[j].GetType())
                     {
                         matcher.Add(fieldsSrc[i].Name, fieldsDest[j].Name);
@@ -101,7 +101,7 @@ namespace Serie1
 
             for (int i = 0; i < propSrc.Length; ++i)
             {
-                for(int j=0; i<propDest.Length;++i)
+                for(int j=0; j<propDest.Length;++j)
                     if (propSrc[i].Name.Equals(propDest[j].Name) && propSrc[i].GetType()== propDest[j].GetType())
                     {
                         matcher.Add(propSrc[i].Name,propDest[j].Name);
@@ -118,13 +118,108 @@ namespace Serie1
             {
 
                 if (matcher.TryGetValue(piSrc[i].Name, out value))
+
                 {
                     pi = klassDest.GetProperty(value);
-                    pi.SetValue(objDest, piSrc[i].GetValue(src));
-                }
+                    if (objDest.GetType().GetProperty(value).PropertyType.IsValueType || objDest.GetType().GetProperty(value).PropertyType == typeof(string) || objDest.GetType().GetProperty(value).PropertyType.IsArray)
+                    {
+                        pi.SetValue(objDest, piSrc[i].GetValue(src));
+                    }
+                    else
+                    {
+                        Type srcPropertyType = piSrc[i].PropertyType;
+                        if (null != srcPropertyType.GetConstructor(new Type[0]))
+                        {
+                            IMapper auxMapper = AutoMapper.Build(srcPropertyType, klassDest.GetProperty(value).PropertyType);
+                            klassDest.GetProperty(value).SetValue(objDest, auxMapper.Map(piSrc[i].GetValue(src)));
+                        }
+                        else
+                        {
+                            PropertyInfo field = objDest.GetType().GetProperty(value);
+                            Type fieldType = field.PropertyType;
 
+
+                            ConstructorInfo[] constructors = fieldType.GetConstructors();
+                            ConstructorInfo chosenOne = null;
+                            Stack<MemberInfo> chosenParameters = new Stack<MemberInfo>();
+                            Stack<MemberInfo> auxParameterStack = new Stack<MemberInfo>();
+
+                            int size = 0;
+
+                            for (int f = 0; f < constructors.Length; ++f)
+                            {
+                                ParameterInfo[] parameters = constructors[f].GetParameters();
+                                auxParameterStack = new Stack<MemberInfo>();
+
+                                for (int fy = 0; fy < parameters.Length; fy++)
+                                {
+                                    FieldInfo[] fields = srcPropertyType.GetFields();
+                                    PropertyInfo[] properties = srcPropertyType.GetProperties();
+
+                                    Boolean parameterMatch = false;
+
+                                    for (int pp = 0; pp < fields.Length; ++pp)
+                                    {
+                                        if (parameters[fy].Name.ToLower().Equals(fields[pp].Name.ToLower()))
+                                        {
+                                            parameterMatch = true;
+                                            auxParameterStack.Push(fields[pp]);
+                                            break;
+                                        }
+
+                                    }
+
+                                    for (int pp = 0; pp < properties.Length; ++pp)
+                                    {
+                                        if (parameters[fy].Name.ToLower().Equals(properties[pp].Name.ToLower()))
+                                        {
+                                            parameterMatch = true;
+                                            auxParameterStack.Push(properties[pp]);
+                                            break;
+                                        }
+
+                                    }
+
+                                    if (parameterMatch == false)
+                                    {
+                                        auxParameterStack = new Stack<MemberInfo>();
+                                        break;
+                                    }
+
+
+                                    if (fy + 1 == parameters.Length && size < parameters.Length)
+                                    {
+                                        chosenOne = constructors[f];
+                                        chosenParameters = auxParameterStack;
+                                        size = parameters.Length;
+                                    }
+                                }
+                            }
+
+                            if (chosenOne != null)
+                            {
+                                object[] parametersToPass = new object[chosenOne.GetParameters().Length];
+                                for (int p = parametersToPass.Length - 1; p >= 0; --p)
+                                {
+                                    MemberInfo parameter = chosenParameters.Pop();
+                                    if (parameter.MemberType == MemberTypes.Field)
+                                    {
+                                        parametersToPass[p] = ((FieldInfo)parameter).GetValue(piSrc[i].GetValue(src));
+                                    }
+                                    else if (parameter.MemberType == MemberTypes.Property)
+                                    {
+                                        parametersToPass[p] = ((PropertyInfo)parameter).GetValue(piSrc[i].GetValue(src));
+                                    }
+
+                                }
+
+                                pi.SetValue(objDest, chosenOne.Invoke(parametersToPass));
+                            }
+                        }
+                    }
+                }
             }
-        }
+                        }
 
 
         private void setFields(object src, object objDest)
@@ -138,7 +233,7 @@ namespace Serie1
 
                 {
                     fi = klassDest.GetField(value);
-                    if (objDest.GetType().GetField(value).GetType().IsValueType)
+                    if (objDest.GetType().GetField(value).FieldType.IsValueType || objDest.GetType().GetField(value).FieldType == typeof(string)|| objDest.GetType().GetField(value).FieldType.IsArray)
                     {
                         fi.SetValue(objDest, fiSrc[i].GetValue(src));
                     }else
@@ -146,7 +241,7 @@ namespace Serie1
                         Type srcFieldType = fiSrc[i].FieldType;
                         if(null != srcFieldType.GetConstructor(new Type[0]))
                         {
-                            IMapper auxMapper = AutoMapper.Build(srcFieldType, klassDest.GetField(value).GetType());
+                            IMapper auxMapper = AutoMapper.Build(srcFieldType, klassDest.GetField(value).FieldType);
                             klassDest.GetField(value).SetValue(objDest, auxMapper.Map(fiSrc[i].GetValue(src)));
                         }
                         else

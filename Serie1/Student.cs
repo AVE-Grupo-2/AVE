@@ -14,6 +14,7 @@ namespace Serie1
         private int privateField;
         public string Name { get; set; }
         public int Nr { get; set; }
+        public School org { get; set; }
 
         private int privateProperty
         {

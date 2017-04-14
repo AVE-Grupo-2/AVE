@@ -13,6 +13,10 @@ namespace Serie1
         public int field;
         public string Name { get; set; }
         public int Id { get; set; }
+        public Organization org
+        {
+            get;set;
+        }
 
         private int privateProperty
         {

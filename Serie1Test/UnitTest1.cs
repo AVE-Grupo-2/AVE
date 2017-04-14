@@ -104,6 +104,25 @@ namespace Serie1Test
             Assert.IsFalse( Object.ReferenceEquals(s.teacher, p.teacher));
             Assert.AreEqual(s.teacher.name, p.teacher.name);
         }
+
+        [TestMethod]
+        public void ReferenceProperty()
+        {
+            int[] ids = { 1, 2, 3, 4 };
+            IMapper m = AutoMapper.Build(typeof(Student), typeof(Person)).Match("Nr", "Id");
+            Student s = new Student { Nr = 27721, Name = "Ze Manel", field = 200, teacher = new Teacher(123, "t") ,
+                org = new School { location = "ab street",
+                membersIDs = ids,
+                name = "aSchool"
+
+                }
+            };
+
+            Person p = (Person)m.Map(s);
+
+            Assert.AreEqual(s.org.name, p.org.name);
+            Assert.AreEqual(s.org.membersIDs[0], p.org.membersIDs[0]);
+        }
     }
 
 }

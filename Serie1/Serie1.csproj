@@ -44,6 +44,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AutoMapper.cs" />
+    <Compile Include="Organization.cs" />
+    <Compile Include="School.cs" />
     <Compile Include="IMapper.cs" />
     <Compile Include="Info.cs" />
     <Compile Include="Mapper.cs" />

@@ -17,3 +17,9 @@ C:\Users\Rafae_000\Desktop\AVE\Serie1\obj\Debug\Serie1.pdb
 C:\Users\Rafae_000\Desktop\AVE\Serie1\bin\Debug\Serie1.exe
 C:\Users\Rafae_000\Desktop\AVE\Serie1\bin\Debug\Serie1.pdb
 C:\Users\Rafae_000\Desktop\AVE\Serie1\obj\Debug\Serie1.csprojResolveAssemblyReference.cache
+C:\Users\Rafae_000\Desktop\AVEalt\Serie-1\Serie1\bin\Debug\Serie1.exe.config
+C:\Users\Rafae_000\Desktop\AVEalt\Serie-1\Serie1\obj\Debug\Serie1.exe
+C:\Users\Rafae_000\Desktop\AVEalt\Serie-1\Serie1\obj\Debug\Serie1.pdb
+C:\Users\Rafae_000\Desktop\AVEalt\Serie-1\Serie1\bin\Debug\Serie1.exe
+C:\Users\Rafae_000\Desktop\AVEalt\Serie-1\Serie1\bin\Debug\Serie1.pdb
+C:\Users\Rafae_000\Desktop\AVEalt\Serie-1\Serie1\obj\Debug\Serie1.csprojResolveAssemblyReference.cache
