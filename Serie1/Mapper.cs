@@ -55,7 +55,22 @@ namespace Serie1
 
         public Mapper Bind(Mapping m)
         {
-            throw new NotImplementedException();
+            matcher = new Dictionary<string, string>();
+            if (m.metodo().Equals("Fields"))
+            {
+                selectEqualFields();
+            }
+            else if (m.metodo().Equals("Properties"))
+            {
+                SelectEqualProperties();
+            }
+            else
+            {
+                selectPropertiesCustomAttributes(m.CustomAtrib);
+                selectFieldsCustomAttributes(m.CustomAtrib);
+            }
+
+
             return this;
         }
 
@@ -327,6 +342,53 @@ namespace Serie1
   
                         }
 
+                    }
+                }
+            }
+        }
+
+        private void selectPropertiesCustomAttributes(Type CustomAttri)
+        {
+
+            PropertyInfo[] propSrc = klassSrc.GetProperties();
+            PropertyInfo[] propDest = klassDest.GetProperties();
+
+            for (int i = 0; i < propSrc.Length; ++i)
+            {
+                var attributes = propSrc[i].GetCustomAttributes(false);
+                foreach (var attribute in attributes)
+                {
+                    if (attribute.GetType() == CustomAttri)
+                    {
+                        for (int j = 0; i < propDest.Length; ++i)
+                            if (propSrc[i].Name.Equals(propDest[j].Name) &&
+                                propSrc[i].GetType() == propDest[j].GetType())
+                            {
+                                matcher.Add(propSrc[i].Name, propDest[j].Name);
+                            }
+                    }
+                }
+            }
+        }
+
+        private void selectFieldsCustomAttributes(Type CustomAttrib)
+        {
+            FieldInfo[] fieldSrc = klassSrc.GetFields();
+            FieldInfo[] fieldDest = klassDest.GetFields();
+
+            for (int i = 0; i < fieldSrc.Length; ++i)
+            {
+                var attributes = fieldSrc[i].GetCustomAttributes(false);
+                foreach (var attribute in attributes)
+                {
+                    if (attribute.GetType() == CustomAttrib)
+                    {
+                        for (int j = 0; i < fieldDest.Length; ++i)
+                            if (fieldSrc[i].Name.Equals(fieldDest[j].Name) &&
+                                fieldSrc[i].GetType() == fieldDest[j].GetType())
+                            {
+                                matcher.Add(fieldSrc[i].Name, fieldDest[j].Name);
+                            }
                     }
                 }
             }
