@@ -148,7 +148,7 @@ namespace Serie1
                             IMapper auxMapper = AutoMapper.Build(srcPropertyType, klassDest.GetProperty(value).PropertyType);
                             klassDest.GetProperty(value).SetValue(objDest, auxMapper.Map(piSrc[i].GetValue(src)));
                         }
-                        else
+                        else if(piSrc[i].GetValue(src)!= null)
                         {
                             PropertyInfo field = objDest.GetType().GetProperty(value);
                             Type fieldType = field.PropertyType;
@@ -259,7 +259,7 @@ namespace Serie1
                             IMapper auxMapper = AutoMapper.Build(srcFieldType, klassDest.GetField(value).FieldType);
                             klassDest.GetField(value).SetValue(objDest, auxMapper.Map(fiSrc[i].GetValue(src)));
                         }
-                        else
+                        else if(fiSrc[i].GetValue(src)!= null)
                         {
                             FieldInfo field = objDest.GetType().GetField(value);
                             Type fieldType = field.FieldType;
