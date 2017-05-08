@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace Serie1
 {
+	/*lol*/
     public class AutoMapper
     {
        
